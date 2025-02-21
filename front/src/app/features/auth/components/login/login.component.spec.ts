@@ -74,7 +74,7 @@ describe('LoginComponent', () => {
     const loginSPy = jest
       .spyOn(authService, 'login')
       .mockImplementation(() => of(sessionInformation));
-      
+
     const routerSpy = jest
       .spyOn(router, 'navigate')
       .mockImplementation(() => Promise.resolve(true));
@@ -112,5 +112,19 @@ describe('LoginComponent', () => {
 
     expect(loginSPy).toHaveBeenCalledWith(loginRequest);
     expect(router.navigate).not.toHaveBeenCalled;
+  });
+
+  it('should disable the submit button if the form has an error field', () => {
+    const loginRequest: LoginRequest = {
+      email: '',
+      password: 'paswword',
+    };
+
+    loginComponent.form.setValue(loginRequest);
+
+    expect(loginComponent.form.invalid).toBeTruthy();
+
+    const submitButton = fixture.debugElement.query(By.css('[type="submit"]'));
+    expect(submitButton.nativeElement.disabled).toBeTruthy();
   });
 });
