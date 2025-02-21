@@ -58,7 +58,7 @@ describe('RegisterComponent', () => {
     const registerSPy = jest
       .spyOn(authService, 'register')
       .mockImplementation(() => of(undefined));
-      
+
     const routerSpy = jest
       .spyOn(router, 'navigate')
       .mockImplementation(() => Promise.resolve(true));
@@ -94,5 +94,21 @@ describe('RegisterComponent', () => {
 
     expect(registerSPy).toHaveBeenCalledWith(registerRequest);
     expect(router.navigate).not.toHaveBeenCalled;
+  });
+
+  it('should disable the submit button if the form has an error field', () => {
+    const registerRequest = {
+      email: '',
+      firstName: 'te',
+      lastName: 'testNom',
+      password: 'test!1234',
+    };
+
+    registerComponent.form.setValue(registerRequest);
+
+    expect(registerComponent.form.invalid).toBeTruthy();
+
+    const submitButton = fixture.debugElement.query(By.css('[type="submit"]'));
+    expect(submitButton.nativeElement.disabled).toBeTruthy();
   });
 });
