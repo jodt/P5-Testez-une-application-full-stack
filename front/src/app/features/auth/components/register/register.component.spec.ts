@@ -26,14 +26,13 @@ describe('RegisterComponent', () => {
       imports: [
         BrowserAnimationsModule,
         HttpClientModule,
-        ReactiveFormsModule,  
+        ReactiveFormsModule,
         MatCardModule,
         MatFormFieldModule,
         MatIconModule,
-        MatInputModule
-      ]
-    })
-      .compileComponents();
+        MatInputModule,
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RegisterComponent);
     registerComponent = fixture.componentInstance;
@@ -47,49 +46,53 @@ describe('RegisterComponent', () => {
   });
 
   it('should submit register form and navigate on success', () => {
-
     const registerRequest = {
-      email: "test@test.fr",
-      firstName:"testPrenom",
-      lastName:"testNom",
-      password:"test!1234"
+      email: 'test@test.fr',
+      firstName: 'testPrenom',
+      lastName: 'testNom',
+      password: 'test!1234',
     };
 
     registerComponent.form.setValue(registerRequest);
 
-    const registerSPy = jest.spyOn(authService,"register").mockImplementation(() => of(undefined));
-    const routerSpy = jest.spyOn(router, 'navigate').mockImplementation(() => Promise.resolve(true));
+    const registerSPy = jest
+      .spyOn(authService, 'register')
+      .mockImplementation(() => of(undefined));
+      
+    const routerSpy = jest
+      .spyOn(router, 'navigate')
+      .mockImplementation(() => Promise.resolve(true));
 
     registerComponent.submit();
 
     expect(registerSPy).toHaveBeenCalledWith(registerRequest);
     expect(routerSpy).toHaveBeenCalledWith(['/login']);
     expect(registerComponent.onError).toBeFalsy();
-  })
+  });
 
   it('should set error to true and display error message', () => {
-
     const registerRequest = {
-      email: "test@test.fr",
-      firstName:"te",
-      lastName:"testNom",
-      password:"test!1234"
+      email: 'test@test.fr',
+      firstName: 'te',
+      lastName: 'testNom',
+      password: 'test!1234',
     };
 
     registerComponent.form.setValue(registerRequest);
 
-    const registerSPy = jest.spyOn(authService,"register").mockImplementation(() => throwError(() => new Error()));
+    const registerSPy = jest
+      .spyOn(authService, 'register')
+      .mockImplementation(() => throwError(() => new Error()));
 
     registerComponent.submit();
     fixture.detectChanges();
 
     expect(registerComponent.onError).toBeTruthy();
 
-    const errorContainer = fixture.debugElement.query(By.css('.error'))
+    const errorContainer = fixture.debugElement.query(By.css('.error'));
     expect(errorContainer.nativeElement.textContent).toBe('An error occurred');
 
     expect(authService.register(registerRequest)).toHaveBeenCalled;
     expect(router.navigate).not.toHaveBeenCalled;
-    
   });
 });
