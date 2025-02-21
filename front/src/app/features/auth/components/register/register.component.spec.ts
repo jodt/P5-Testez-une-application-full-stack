@@ -64,7 +64,7 @@ describe('RegisterComponent', () => {
 
     expect(registerSPy).toHaveBeenCalledWith(registerRequest);
     expect(routerSpy).toHaveBeenCalledWith(['/login']);
-    expect(registerComponent.onError).not.toBeTruthy();
+    expect(registerComponent.onError).toBeFalsy();
   })
 
   it('should set error to true and display error message', () => {
