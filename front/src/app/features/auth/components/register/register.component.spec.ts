@@ -79,7 +79,6 @@ describe('RegisterComponent', () => {
     registerComponent.form.setValue(registerRequest);
 
     const registerSPy = jest.spyOn(authService,"register").mockImplementation(() => throwError(() => new Error()));
-    const routerSpy = jest.spyOn(router, 'navigate').mockImplementation(() => Promise.resolve(true));
 
     registerComponent.submit();
     fixture.detectChanges();
