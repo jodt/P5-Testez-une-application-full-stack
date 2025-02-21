@@ -92,7 +92,7 @@ describe('RegisterComponent', () => {
     const errorContainer = fixture.debugElement.query(By.css('.error'));
     expect(errorContainer.nativeElement.textContent).toBe('An error occurred');
 
-    expect(authService.register(registerRequest)).toHaveBeenCalled;
+    expect(registerSPy).toHaveBeenCalledWith(registerRequest);
     expect(router.navigate).not.toHaveBeenCalled;
   });
 });
