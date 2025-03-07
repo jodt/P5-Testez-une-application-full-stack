@@ -179,7 +179,7 @@ class UserControllerTest {
     @DisplayName("should delete user by its id -> bad request")
     void shouldNotDeleteUserByIdBadRequest() throws Exception {
 
-        ResponseEntity<?> response = this.userController.findById("A");
+        ResponseEntity<?> response = this.userController.save("A");
 
         assertEquals(400, response.getStatusCodeValue());
         assertFalse(response.hasBody());
