@@ -53,8 +53,8 @@ class TeacherControllerTest {
 
         secondTeacher = Teacher.builder()
                 .id(2L)
-                .firstName("firstTeacherFirstName")
-                .lastName("firstTeacherLastName")
+                .firstName("secondTeacherFirstName")
+                .lastName("secondTeacherLastName")
                 .updatedAt(LocalDateTime.now())
                 .createdAt(LocalDateTime.now())
                 .build();
