@@ -36,7 +36,7 @@ To use Yoga-app, follow these steps:
 * Select the database you just created using the following command : 
 
   ```
-  use test
+  USE test
   ```
   :warning: Remember to use the correct database name if you gave it a different name.
 
