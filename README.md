@@ -103,6 +103,20 @@ and the "sql" subfolder. Copy the file path and run the command::
   The coverage rate is currently 98%
   ![junit report](./ressources/report/junit.png)
 
+
+* To run all tests, including integration tests, run the following command:
+  ```
+  mvn clean verify
+  ```
+  In addition to the unit test coverage report, this command generates a coverage report for integration tests that you can retrieve from this location:
+
+  :point_right: ./target/site/jacoco-report-integration/index.html
+
+  &nbsp;
+
+  The integration test coverage rate is currently 60%
+  ![juint integration report](./ressources/report/junit-integration.png)
+
 ## <ins>FRONT-END</ins>
 
 ### Prerequisites
