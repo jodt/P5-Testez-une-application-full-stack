@@ -80,7 +80,7 @@ and the "sql" subfolder. Copy the file path and run the command::
   
   ```
   mvn clean install
-  java -jar target/chatop-0.0.1-SNAPSHOT.jar
+  java -jar target/yoga-app-0.0.1-SNAPSHOT.jar
   ```
   **or**
   ```
