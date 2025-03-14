@@ -42,7 +42,7 @@ class TeacherServiceTest {
                 .build();
 
         secondTeacher = Teacher.builder()
-                .id(1L)
+                .id(2L)
                 .firstName("firstTeacherFirstName")
                 .lastName("firstTeacherLastName")
                 .updatedAt(LocalDateTime.now())
