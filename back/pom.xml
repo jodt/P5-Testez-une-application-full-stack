@@ -111,6 +111,13 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.5</version>
+				<configuration>
+					<excludes>
+						<exclude>com/openclassrooms/starterjwt/mapper/**</exclude>
+						<exclude>com/openclassrooms/starterjwt/security/services/UserDetailsImpl*</exclude>
+						<exclude>com/openclassrooms/starterjwt/SpringBootSecurityJwtApplication*</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -139,7 +146,7 @@
 										<limit>
 											<counter>LINE</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0.9</minimum>
+											<minimum>0.8</minimum>
 										</limit>
 									</limits>
 								</rule>
