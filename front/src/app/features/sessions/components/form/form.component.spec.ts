@@ -48,7 +48,6 @@ describe('FormComponent', () => {
       ],
       providers: [
         { provide: SessionService, useValue: mockSessionService },
-        SessionApiService,
       ],
       declarations: [FormComponent],
     }).compileComponents();
@@ -56,7 +55,6 @@ describe('FormComponent', () => {
     router = TestBed.inject(Router);
     matSnackBar = TestBed.inject(MatSnackBar);
     sessionApiService = TestBed.inject(SessionApiService);
-
     fixture = TestBed.createComponent(FormComponent);
     formComponent = fixture.componentInstance;
     fixture.detectChanges();
@@ -66,19 +64,17 @@ describe('FormComponent', () => {
     expect(formComponent).toBeTruthy();
   });
 
-  it('sould create session and redirect the user', () => {
+  it('should create session and redirect the user', () => {
     const session: Session = {
-      id: 1,
       name: 'yoga',
       description: 'yoga for beginners',
       date: new Date(),
       teacher_id: 1,
-      users: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    } as Session;
 
-    jest
+    formComponent.sessionForm?.setValue(session);
+
+    const sessionApiServiceSpy = jest
       .spyOn(sessionApiService, 'create')
       .mockImplementation(() => of(session));
     const matSnackBarSpy = jest.spyOn(matSnackBar, 'open').mockImplementation();
@@ -88,30 +84,31 @@ describe('FormComponent', () => {
 
     formComponent.submit();
 
+    expect(sessionApiServiceSpy).toHaveBeenCalledWith(session);
     expect(matSnackBarSpy).toHaveBeenCalledWith('Session created !', 'Close', {
       duration: 3000,
     });
     expect(routerSpy).toHaveBeenCalledWith(['sessions']);
   });
 
-  it('sould update session and redirect the user', () => {
+  it('should update session and redirect the user', () => {
     formComponent.onUpdate = true;
 
     const session: Session = {
-      id: 1,
       name: 'yoga',
       description: 'yoga for beginners',
       date: new Date(),
       teacher_id: 1,
-      users: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    } as Session;
 
-    jest
+    formComponent.sessionForm?.setValue(session);
+
+    const sessionApiServiceSpy = jest
       .spyOn(sessionApiService, 'update')
       .mockImplementation(() => of(session));
+
     const matSnackBarSpy = jest.spyOn(matSnackBar, 'open').mockImplementation();
+
     const routerSpy = jest
       .spyOn(router, 'navigate')
       .mockImplementation(() => Promise.resolve(true));
