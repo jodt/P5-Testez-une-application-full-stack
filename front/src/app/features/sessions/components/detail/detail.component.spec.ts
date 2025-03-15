@@ -14,7 +14,7 @@ import { Teacher } from 'src/app/interfaces/teacher.interface';
 import { By } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 describe('DetailComponent', () => {
   let detailComponent: DetailComponent;
@@ -23,6 +23,7 @@ describe('DetailComponent', () => {
   let sessionApiService: SessionApiService;
   let teacherService: TeacherService;
   let router: Router;
+  let activatedRoute: ActivatedRoute;
   let matSnackBar: MatSnackBar;
 
   const mockSessionService = {
@@ -43,12 +44,23 @@ describe('DetailComponent', () => {
     updatedAt: new Date(),
   };
 
+  const mockApiSessionService = {
+    detail: jest.fn(() => of(mockSession)),
+    delete: jest.fn(() => of(undefined)),
+    participate: jest.fn(() => of(undefined)),
+    unParticipate: jest.fn(() => of(undefined)),
+  };
+
   const mockTeacher: Teacher = {
     id: 1,
     lastName: 'lastName',
     firstName: 'firstName',
     createdAt: new Date(),
     updatedAt: new Date(),
+  };
+
+  const mockTeacherService = {
+    detail: jest.fn(() => of(mockSession)),
   };
 
   beforeEach(async () => {
@@ -62,7 +74,11 @@ describe('DetailComponent', () => {
         MatCardModule,
       ],
       declarations: [DetailComponent],
-      providers: [{ provide: SessionService, useValue: mockSessionService }],
+      providers: [
+        { provide: SessionService, useValue: mockSessionService },
+        { provide: SessionApiService, useValue: mockApiSessionService },
+        { provide: TeacherService, useValue: mockTeacherService },
+      ],
     }).compileComponents();
 
     service = TestBed.inject(SessionService);
@@ -70,13 +86,7 @@ describe('DetailComponent', () => {
     teacherService = TestBed.inject(TeacherService);
     router = TestBed.inject(Router);
     matSnackBar = TestBed.inject(MatSnackBar);
-
-    jest
-      .spyOn(sessionApiService, 'detail')
-      .mockImplementation(() => of(mockSession));
-    jest
-      .spyOn(teacherService, 'detail')
-      .mockImplementation(() => of(mockTeacher));
+    activatedRoute = TestBed.inject(ActivatedRoute);
 
     fixture = TestBed.createComponent(DetailComponent);
     detailComponent = fixture.componentInstance;
@@ -88,32 +98,36 @@ describe('DetailComponent', () => {
   });
 
   it('should participate', () => {
-    jest
-      .spyOn(sessionApiService, 'participate')
-      .mockImplementation(() => of(undefined));
+    const activatedRouteSpy = jest
+      .spyOn(activatedRoute.snapshot.paramMap, 'get')
+      .mockImplementation(() => '1');
 
     detailComponent.participate();
 
+    expect(sessionApiService.participate).toHaveBeenCalledWith(
+      detailComponent.sessionId,
+      detailComponent.userId
+    );
     expect(detailComponent.isParticipate).toBe(true);
   });
 
   it('should unParticipate', () => {
     mockSession.users = [41];
 
-    jest
-      .spyOn(sessionApiService, 'unParticipate')
-      .mockImplementation(() => of(undefined));
+    const activatedRouteSpy = jest
+      .spyOn(activatedRoute.snapshot.paramMap, 'get')
+      .mockImplementation(() => '1');
 
     detailComponent.unParticipate();
 
+    expect(sessionApiService.participate).toHaveBeenCalledWith(
+      detailComponent.sessionId,
+      detailComponent.userId
+    );
     expect(detailComponent.isParticipate).toBe(false);
   });
 
   it('should delete the session', () => {
-    jest
-      .spyOn(sessionApiService, 'delete')
-      .mockImplementation(() => of(undefined));
-
     const matSnackBarSpy = jest.spyOn(matSnackBar, 'open').mockImplementation();
 
     const routerSpy = jest
@@ -133,7 +147,7 @@ describe('DetailComponent', () => {
 
     expect(sessionTitleContainer).toBeTruthy();
     expect(sessionTitleContainer.nativeElement.textContent).toContain('Yoga');
-  })
+  });
 
   it('should display delete button if user is admin', () => {
     const deleteButtonContainers = fixture.debugElement.queryAll(
