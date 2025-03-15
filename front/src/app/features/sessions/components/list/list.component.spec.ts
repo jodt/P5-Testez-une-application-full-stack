@@ -73,9 +73,13 @@ describe('ListComponent', () => {
 
   it('should display session', () => {
     const cardContainers = fixture.debugElement.queryAll(By.css('.item'));
+    const pictureContainers = fixture.debugElement.queryAll(By.css('.picture'));
+    const descriptionContainer = fixture.debugElement.query(By.css('mat-card-content>p'))
 
     expect(cardContainers.length).toBe(1);
     expect(cardContainers[0].nativeElement.textContent).toContain('yoga');
+    expect(pictureContainers.length).toBe(1);
+    expect(descriptionContainer.nativeElement.textContent).toContain('yoga for beginners');
   });
 
   it('should show edit button if user is admin', () => {
