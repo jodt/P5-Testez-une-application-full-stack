@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import { SessionService } from './services/session.service';
 import { of } from 'rxjs';
+import { By } from '@angular/platform-browser';
 
 
 describe('AppComponent', () => {
@@ -48,12 +49,26 @@ describe('AppComponent', () => {
     })
   })
 
-  it('should logout', () => {
+  it('should log out', () => {
     const logoutSpy = jest.spyOn(sessionService, 'logOut');
     const routerSpy = jest.spyOn(router, 'navigate').mockImplementation(() => Promise.resolve(true));
     app.logout();
     expect(logoutSpy).toHaveBeenCalled;
-    expect(routerSpy).toHaveBeenLastCalledWith([""]);
+    expect(routerSpy).toHaveBeenLastCalledWith(['']);
+  })
+
+  it('should log out by clicking the logout button', () => {
+    jest.spyOn(sessionService,'$isLogged').mockReturnValue(of(true));
+    fixture.detectChanges();
+
+    const logoutSpy = jest.spyOn(sessionService, 'logOut');
+    const routerSpy = jest.spyOn(router, 'navigate').mockImplementation(() => Promise.resolve(true));
+
+    const logoutbutton = fixture.debugElement.query(By.css('.link:nth-child(3)')).nativeElement;
+    logoutbutton.click();
+
+    expect(logoutSpy).toHaveBeenCalled;
+    expect(routerSpy).toHaveBeenLastCalledWith(['']);
   })
 });
 
