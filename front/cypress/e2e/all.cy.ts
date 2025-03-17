@@ -1,0 +1,7 @@
+import './login.cy'
+import './me.cy'
+import './register.cy'
+import './list.cy'
+import './detail.cy'
+import './form.cy'
+import './not-found.cy'

@@ -5,8 +5,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { expect } from '@jest/globals';
 
 import { AppComponent } from './app.component';
-import { provideRouter, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SessionService } from './services/session.service';
+import { of } from 'rxjs';
+import { By } from '@angular/platform-browser';
 
 
 describe('AppComponent', () => {
@@ -25,7 +27,6 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
-      providers: [provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
@@ -35,15 +36,40 @@ describe('AppComponent', () => {
 
   });
 
-  it('should create the app', () => {
+  it('should create appComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should logout', () => {
-    router.navigate = jest.fn();
-    sessionService.logOut= jest.fn();
+  it('should logged', (done) => {
+    const loggedSpy = jest.spyOn(sessionService, '$isLogged').mockImplementation(() => of((true)));
+    app.$isLogged().subscribe((isLogged) => {
+      expect(isLogged).toBe(true);
+      expect(loggedSpy).toHaveBeenCalledTimes(1);
+      done();
+    })
+  })
+
+  it('should log out', () => {
+    const logoutSpy = jest.spyOn(sessionService, 'logOut');
+    const routerSpy = jest.spyOn(router, 'navigate').mockImplementation(() => Promise.resolve(true));
     app.logout();
-    expect(sessionService.logOut).toBeCalled();
-    expect(router.navigate).toHaveBeenLastCalledWith([""]);
+    expect(logoutSpy).toHaveBeenCalled;
+    expect(routerSpy).toHaveBeenLastCalledWith(['']);
+  })
+
+  it('should log out by clicking the logout button', () => {
+    jest.spyOn(sessionService,'$isLogged').mockReturnValue(of(true));
+    fixture.detectChanges();
+
+    const logoutSpy = jest.spyOn(sessionService, 'logOut');
+    const routerSpy = jest.spyOn(router, 'navigate').mockImplementation(() => Promise.resolve(true));
+
+    const logoutbutton = fixture.debugElement.query(By.css('.link:nth-child(3)')).nativeElement;
+    logoutbutton.click();
+
+    expect(logoutSpy).toHaveBeenCalled;
+    expect(routerSpy).toHaveBeenLastCalledWith(['']);
   })
 });
+
+
