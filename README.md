@@ -114,7 +114,7 @@ and the "sql" subfolder. Copy the file path and run the command::
 
   &nbsp;
 
-  The integration test coverage rate is currently 60%
+  The integration test coverage rate is currently 75%
   ![juint integration report](./ressources/report/junit-integration.png)
 
 ## <ins>FRONT-END</ins>
